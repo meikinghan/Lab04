@@ -1,0 +1,38 @@
+#include "SevSeg.h"
+SevSeg sevseg; //Instantiate a seven segment controller object
+
+void setup() {
+  pinMode(6,INPUT);
+  byte numDigits = 4;
+  byte digitPins[] = {2, 3, 4, 5};
+  byte segmentPins[] = {8,9,10,11,12,13,14,15};
+  byte hardwareConfig = COMMON_CATHODE; 
+  sevseg.begin(hardwareConfig, numDigits, digitPins, segmentPins);
+  sevseg.setBrightness(90);
+  
+}
+
+void loop() {
+  static unsigned long timer = millis();
+  static int a=0,b=0;
+  if(millis()-timer>=300)
+  {
+    timer+=300;
+    a++;
+    if(a==60)
+    {
+      a=0;
+      b++;
+    }
+    if(b=24)
+    {
+      b=0;
+    }
+    sevseg.setNumber(a+b*100);
+  }
+  if(digitalRead(6))
+  {
+    a=b=0;
+    }
+  sevseg.refreshDisplay();
+}
